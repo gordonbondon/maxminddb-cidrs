@@ -17,6 +17,10 @@ Usage of maxminddb-cidrs:
     	Can be passed multiple times
   -dbpath string
     	Path to GeoIP2 mmdb file, requires detailed GeoIP2-City to use subdivisions (default "GeoIP2-City.mmdb")
+  -ipv4
+    	return only IPv4 networks
+  -ipv6
+    	return only IPv6 networks
 ```
 
 ### Library
@@ -31,6 +35,7 @@ import (
 func main() {
 	options := &cidrs.ListOptions{
 		DBPath: "./GeoIP2-City.mmdb",
+		IPv4: true,
 		Countries: []cidrs.Country{
 			{
 				ISOCode:      "GB",

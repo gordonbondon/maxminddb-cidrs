@@ -35,14 +35,19 @@ func (c *CountriesValue) String() string {
 func main() {
 	var dbPathFlag string
 	var countriesFlag CountriesValue
+	var ipv4Flag, ipv6Flag bool
 
 	flag.StringVar(&dbPathFlag, "dbpath", "GeoIP2-City.mmdb", dbPathFlagHelp)
 	flag.Var(&countriesFlag, "country", countriesFlagHelp)
+	flag.BoolVar(&ipv4Flag, "ipv4", false, ipv4FlagHelp)
+	flag.BoolVar(&ipv6Flag, "ipv6", false, ipv6FlagHelp)
 	flag.Parse()
 
 	results, err := cidrs.List(&cidrs.ListOptions{
 		DBPath:    dbPathFlag,
 		Countries: countriesFlag,
+		IPv4:      ipv4Flag,
+		IPv6:      ipv6Flag,
 	})
 
 	if err != nil {
@@ -61,4 +66,6 @@ Ex:
 	-country CH:GE,ZH"
 
 Can be passed multiple times`
+	ipv4FlagHelp = `return only IPv4 networks`
+	ipv6FlagHelp = `return only IPv6 networks`
 )

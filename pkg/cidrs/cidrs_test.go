@@ -163,6 +163,30 @@ func TestCIDRs(t *testing.T) {
 			},
 			expected: []string{"192.0.2.1/32", "192.0.2.2/32"},
 		},
+		{
+			name: "filters by ip type",
+			reader: &TestNetrowksReader{
+				networks: []struct {
+					Country      string
+					Subdivisions []string
+					IP           string
+				}{
+					{
+						Country: "GB",
+						IP:      "192.0.2.1/32",
+					},
+					{
+						Country: "GB",
+						IP:      "2a02:f600::/29",
+					},
+				},
+			},
+			options: cidrs.ListOptions{
+				IPv4:      true,
+				Countries: []cidrs.Country{{ISOCode: "GB"}},
+			},
+			expected: []string{"192.0.2.1/32"},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -170,7 +194,7 @@ func TestCIDRs(t *testing.T) {
 			tc.options.NetworksReader = tc.reader
 			actual, _ := cidrs.List(&tc.options)
 
-			assert.Equal(t, actual, tc.expected, "results should be equal")
+			assert.Equal(t, tc.expected, actual, "results should be equal")
 		})
 	}
 }

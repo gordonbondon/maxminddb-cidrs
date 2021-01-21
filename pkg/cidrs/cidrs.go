@@ -29,6 +29,12 @@ type ListOptions struct {
 
 	// List of countries and subdivisions to select
 	Countries []Country
+
+	// IPv4 set to return only this type
+	IPv4 bool
+
+	// IPv6 set to return only this type
+	IPv6 bool
 }
 
 // List will return list of CIDRs belonging to countries base on ListOptions provided
@@ -69,6 +75,14 @@ func List(options *ListOptions) ([]string, error) {
 		subnet, err := networks.Network(&record)
 		if err != nil {
 			return nil, err
+		}
+
+		if options.IPv4 && subnet.IP.To4() == nil {
+			continue
+		}
+
+		if options.IPv6 && subnet.IP.To16() == nil {
+			continue
 		}
 
 		if s, ok := match[record.Country.IsoCode]; ok {
