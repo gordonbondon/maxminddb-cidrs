@@ -81,7 +81,7 @@ func List(options *ListOptions) ([]string, error) {
 			continue
 		}
 
-		if options.IPv6 && subnet.IP.To16() == nil {
+		if options.IPv6 && subnet.IP.To4() != nil {
 			continue
 		}
 

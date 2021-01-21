@@ -187,6 +187,30 @@ func TestCIDRs(t *testing.T) {
 			},
 			expected: []string{"192.0.2.1/32"},
 		},
+		{
+			name: "filters by ip type ipv6",
+			reader: &TestNetrowksReader{
+				networks: []struct {
+					Country      string
+					Subdivisions []string
+					IP           string
+				}{
+					{
+						Country: "GB",
+						IP:      "192.0.2.1/32",
+					},
+					{
+						Country: "GB",
+						IP:      "2a02:f600::/29",
+					},
+				},
+			},
+			options: cidrs.ListOptions{
+				IPv6:      true,
+				Countries: []cidrs.Country{{ISOCode: "GB"}},
+			},
+			expected: []string{"2a02:f600::/29"},
+		},
 	}
 
 	for _, tc := range testCases {
