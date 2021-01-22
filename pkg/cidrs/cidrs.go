@@ -1,6 +1,7 @@
 package cidrs
 
 import (
+	"fmt"
 	"net"
 
 	maxminddb "github.com/oschwald/maxminddb-golang"
@@ -42,7 +43,7 @@ func List(options *ListOptions) ([]string, error) {
 	if options.NetworksReader == nil {
 		db, err := maxminddb.Open(options.DBPath)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed opening db: %w", err)
 		}
 		defer db.Close()
 
@@ -74,7 +75,7 @@ func List(options *ListOptions) ([]string, error) {
 	for networks.Next() {
 		subnet, err := networks.Network(&record)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed parsing network: %w", err)
 		}
 
 		if options.IPv4 && subnet.IP.To4() == nil {
@@ -90,6 +91,7 @@ func List(options *ListOptions) ([]string, error) {
 				for _, i := range record.Subdivisions {
 					if _, ok := s[i.IsoCode]; ok {
 						results = append(results, subnet.String())
+
 						continue
 					}
 				}
@@ -98,6 +100,7 @@ func List(options *ListOptions) ([]string, error) {
 			}
 		}
 	}
+
 	if networks.Err() != nil {
 		return nil, networks.Err()
 	}

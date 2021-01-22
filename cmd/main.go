@@ -49,7 +49,6 @@ func main() {
 		IPv4:      ipv4Flag,
 		IPv6:      ipv6Flag,
 	})
-
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,0 +1,28 @@
+linters:
+  enable-all: true
+  disable:
+    - funlen
+    - godot
+    - exhaustivestruct
+    - gocognit
+
+linters-settings:
+  wsl:
+    allow-cuddle-declarations: true
+  gci:
+    local-prefixes: github.com/gordonbondon/maxminddb-cidrs
+
+issues:
+  exclude-rules:
+    - linters:
+        - wsl
+        - errcheck
+        - dogsled
+        - funlen
+        - scopelint
+      path: tests|_test\.go
+    - linters:
+        - forbidigo
+        - goerr113
+        - gomnd
+      path: main.go

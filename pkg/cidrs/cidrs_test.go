@@ -28,10 +28,11 @@ func (n *TestNetrowksReader) Next() bool {
 	if len(n.networks) > 0 {
 		n.next = n.networks[0]
 		n.networks = n.networks[1:]
+
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 func (n *TestNetrowksReader) Network(result interface{}) (*net.IPNet, error) {
@@ -69,6 +70,8 @@ func (n *TestNetrowksReader) Err() error {
 }
 
 func TestCIDRs(t *testing.T) {
+	t.Parallel()
+
 	testCases := []struct {
 		name     string
 		reader   *TestNetrowksReader
@@ -132,7 +135,7 @@ func TestCIDRs(t *testing.T) {
 			expected: []string{"192.0.2.1/32"},
 		},
 		{
-			name: "matches for multiple countires",
+			name: "matches for multiple countries",
 			reader: &TestNetrowksReader{
 				networks: []struct {
 					Country      string
@@ -214,7 +217,11 @@ func TestCIDRs(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
+		tc := tc
+
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
 			tc.options.NetworksReader = tc.reader
 			actual, _ := cidrs.List(&tc.options)
 
