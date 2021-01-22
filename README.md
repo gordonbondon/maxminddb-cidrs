@@ -1,5 +1,7 @@
 # maxminddb-cidrs
 
+![Build status](https://github.com/gordonbondon/maxminddb-cidrs/workflows/Tests/badge.svg?branch=master)
+
 Convenience command-line and library wrapper for [maxminddb-golang](https://github.com/oschwald/maxminddb-golang)
 that helps retrieving network lists based on [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) country codes and subdivision codes.
 
